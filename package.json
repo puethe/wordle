@@ -1,8 +1,34 @@
 {
   "devDependencies": {
-    "@types/node": "^22.15.17"
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.15.17",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
   },
   "dependencies": {
     "express": "^5.1.0"
-  }
+  },
+  "name": "wordle",
+  "version": "1.0.0",
+  "description": "A re-implementation of the [Wordle game](https://www.nytimes.com/games/wordle/index.html) in NodeJS, with a focus on the backend logic",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "dev": "nodemon src/index.ts",
+    "build": "tsc",
+    "serve": "node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/puethe/wordle.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/puethe/wordle/issues"
+  },
+  "homepage": "https://github.com/puethe/wordle#readme"
 }
