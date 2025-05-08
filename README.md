@@ -3,7 +3,7 @@ A re-implementation of the [Wordle game](https://www.nytimes.com/games/wordle/in
 with a focus on the backend logic
 
 ## Development steps (preliminary list)
-- [ ] Simple app with a GET endpoint that returns a boolean for a trial word (solution stored in code/file)
+- [x] Simple app with a GET endpoint that returns a boolean for a trial word (solution stored in code/file)
 - [ ] Simple validation (word must have 5 letters)
 - [ ] Boolean response for each letter
 - [ ] Detailed response for each letter (incl. "yellow" phases)
