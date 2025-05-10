@@ -1,18 +1,15 @@
-import express, { Request, Response } from "express";
+import express from "express";
+import swaggerUi from "swagger-ui-express";
+import swaggerOutput from "./swagger_output.json";
+import {router} from "./routes";
 
 const app = express();
-const port = 3000;
+const PORT = 3000;
 
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}/`);
+app.use(express.json());
+app.use("/", router)
+app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerOutput));
+
+app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}/`);
 });
-
-app.get("/", (req: Request, res: Response) => {
-    const guess = req.query.guess!.toString()
-    res.json({"result": checkWord(guess)});
-});
-
-const checkWord = (guess: string): boolean => {
-    const trueAnswer = "black"
-    return guess === trueAnswer
-}
