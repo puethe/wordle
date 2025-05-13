@@ -4,7 +4,7 @@ with a focus on the backend logic
 
 ## Development steps (preliminary list)
 - [x] Simple app with a GET endpoint that returns a boolean for a trial word (solution stored in code/file)
-- [ ] Simple validation (word must have 5 letters)
+- [x] Simple validation (word must have 5 letters)
 - [ ] Boolean response for each letter
 - [ ] Detailed response for each letter (incl. "yellow" phases)
 - [ ] Storage of result in a database
