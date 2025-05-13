@@ -22,9 +22,10 @@ const mapErrorCode = (domainErrorCode: ErrorCode) => {
 
 export const errorHandler: ErrorRequestHandler = (
   err: Error,
-  req: Request,
+  _req: Request,
   res: Response,
-  next: NextFunction,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _next: NextFunction,
 ) => {
   // Handled errors
   if (err instanceof CustomError) {
