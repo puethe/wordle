@@ -5,7 +5,7 @@ import {
   Response,
   Router,
 } from 'express';
-import { checkWord } from './domain';
+import { checkWord, TRUE_ANSWER } from './domain';
 import { CustomError, ErrorCode } from './error';
 
 const HTTP_BAD_REQUEST = 400;
@@ -44,5 +44,5 @@ export const router = Router();
 
 router.get('/api', (req: Request, res: Response) => {
   const guess = req.query.guess!.toString();
-  res.json({ result: checkWord(guess) });
+  res.json(checkWord(guess, TRUE_ANSWER));
 });
