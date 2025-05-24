@@ -1,11 +1,12 @@
 import { CustomError } from './error';
 
-const NB_CHARS = 5;
+export const NB_CHARS = 5;
 export const TRUE_ANSWER = 'black';
 
-interface LetterResult {
+export interface LetterResult {
   index: number;
-  correct: boolean;
+  correctAtPosition: boolean;
+  presentElsewhere: boolean;
 }
 
 type WordResult = Array<LetterResult>;
@@ -22,16 +23,49 @@ export const checkWord = (guess: string, answer: string): AttemptResult => {
     });
   }
 
+  // Loop over the word a first time to find exact matches
+  const correctIndexes: Array<number> = [];
+  const remainingLetters: Array<string> = [];
+  for (let i = 0; i < NB_CHARS; i++) {
+    if (guess[i] === answer[i]) {
+      correctIndexes.push(i);
+    } else if (answer.indexOf(guess[i]) !== -1) {
+      remainingLetters.push(guess[i]);
+    }
+  }
+
+  // Loop over the word a second time to find matches at different positions and build result
   const wordResult: WordResult = [];
   for (let i = 0; i < NB_CHARS; i++) {
-    const letterResult: LetterResult = {
-      index: i,
-      correct: guess[i] === answer[i],
-    };
-    wordResult.push(letterResult);
+    if (correctIndexes.indexOf(i) !== -1) {
+      const letterResult: LetterResult = {
+        index: i,
+        correctAtPosition: true,
+        presentElsewhere: false,
+      };
+      wordResult.push(letterResult);
+    } else {
+      const index = remainingLetters.indexOf(guess[i]);
+      if (index !== -1) {
+        const letterResult: LetterResult = {
+          index: i,
+          correctAtPosition: false,
+          presentElsewhere: true,
+        };
+        wordResult.push(letterResult);
+        remainingLetters.splice(index, 1);
+      } else {
+        const letterResult: LetterResult = {
+          index: i,
+          correctAtPosition: false,
+          presentElsewhere: false,
+        };
+        wordResult.push(letterResult);
+      }
+    }
   }
   return {
     byLetter: wordResult,
-    overall: wordResult.every((lr) => lr.correct),
+    overall: wordResult.every((lr) => lr.correctAtPosition),
   };
 };
