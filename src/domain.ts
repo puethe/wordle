@@ -16,6 +16,11 @@ interface AttemptResult {
   overall: boolean;
 }
 
+interface LetterIntermediateResult {
+  isRemaining: boolean;
+  value: string;
+}
+
 export const checkWord = (guess: string, answer: string): AttemptResult => {
   if (guess.length !== NB_CHARS) {
     throw new CustomError({
@@ -24,20 +29,21 @@ export const checkWord = (guess: string, answer: string): AttemptResult => {
   }
 
   // Loop over the word a first time to find exact matches
-  const correctIndexes: Array<number> = [];
-  const remainingLetters: Array<string> = [];
+  const remainingLetters: Array<LetterIntermediateResult> = [];
+  const correctIndexes: Set<number> = new Set();
   for (let i = 0; i < NB_CHARS; i++) {
-    if (guess[i] === answer[i]) {
-      correctIndexes.push(i);
-    } else if (answer.indexOf(guess[i]) !== -1) {
-      remainingLetters.push(guess[i]);
+    if (guess.charAt(i) === answer.charAt(i)) {
+      correctIndexes.add(i);
+      remainingLetters.push({ isRemaining: false, value: answer.charAt(i) });
+    } else {
+      remainingLetters.push({ isRemaining: true, value: answer.charAt(i) });
     }
   }
 
   // Loop over the word a second time to find matches at different positions and build result
   const wordResult: WordResult = [];
   for (let i = 0; i < NB_CHARS; i++) {
-    if (correctIndexes.indexOf(i) !== -1) {
+    if (correctIndexes.has(i)) {
       const letterResult: LetterResult = {
         index: i,
         correctAtPosition: true,
@@ -45,15 +51,17 @@ export const checkWord = (guess: string, answer: string): AttemptResult => {
       };
       wordResult.push(letterResult);
     } else {
-      const index = remainingLetters.indexOf(guess[i]);
-      if (index !== -1) {
+      const remIndex: number = remainingLetters.findIndex(
+        (el) => el.isRemaining && el.value === guess.charAt(i),
+      );
+      if (remIndex !== -1) {
         const letterResult: LetterResult = {
           index: i,
           correctAtPosition: false,
           presentElsewhere: true,
         };
         wordResult.push(letterResult);
-        remainingLetters.splice(index, 1);
+        remainingLetters[remIndex].isRemaining = false;
       } else {
         const letterResult: LetterResult = {
           index: i,
