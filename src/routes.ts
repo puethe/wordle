@@ -5,8 +5,9 @@ import {
   Response,
   Router,
 } from 'express';
-import { checkWord, TRUE_ANSWER } from './domain';
+import { CheckWordUseCase } from './domain';
 import { CustomError, ErrorCode } from './error';
+import { HardcodedAdapter } from './adapters';
 
 const HTTP_BAD_REQUEST = 400;
 const HTTP_INTERNAL_SERVER_ERROR = 500;
@@ -44,5 +45,8 @@ export const router = Router();
 
 router.get('/api', (req: Request, res: Response) => {
   const guess = req.query.guess!.toString();
-  res.json(checkWord(guess, TRUE_ANSWER));
+  const adapter = new HardcodedAdapter();
+  const uc = new CheckWordUseCase(adapter);
+  const result = uc.execute(guess);
+  res.json(result);
 });

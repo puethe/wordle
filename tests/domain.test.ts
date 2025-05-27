@@ -1,5 +1,19 @@
-import { checkWord, LetterResult, NB_CHARS } from '../src/domain';
+import {
+  CheckWordUseCase,
+  IStorageAdapter,
+  LetterResult,
+  NB_CHARS,
+} from '../src/domain';
 import { CustomError } from '../src/error';
+
+class FakeStorageAdapter extends IStorageAdapter {
+  constructor(private readonly correctAnswer: string) {
+    super();
+  }
+  fetchTrueAnswer(): string {
+    return this.correctAnswer;
+  }
+}
 
 const makeCorrectResult = (idx: number): LetterResult => {
   return {
@@ -27,17 +41,19 @@ const makeFalseResult = (idx: number): LetterResult => {
 
 describe('Checking guess against correct answer', () => {
   test('Guess is of wrong length', () => {
-    const correctAnswer = 'black';
+    const adapter = new FakeStorageAdapter('black');
+    const uc = new CheckWordUseCase(adapter);
     const guess = 'blue';
     expect(() => {
-      checkWord(guess, correctAnswer);
+      uc.execute(guess);
     }).toThrow(CustomError);
   });
 
   test('Correct answer and guess share some common letters', () => {
-    const correctAnswer = 'black';
+    const adapter = new FakeStorageAdapter('black');
+    const uc = new CheckWordUseCase(adapter);
     const guess = 'blind';
-    const result = checkWord(guess, correctAnswer);
+    const result = uc.execute(guess);
     expect(result.overall).toBeFalsy();
     expect(result.byLetter[0]).toEqual(makeCorrectResult(0));
     expect(result.byLetter[1]).toEqual(makeCorrectResult(1));
@@ -47,9 +63,10 @@ describe('Checking guess against correct answer', () => {
   });
 
   test('Correct answer and guess share letters at different indexes', () => {
-    const correctAnswer = 'black';
+    const adapter = new FakeStorageAdapter('black');
+    const uc = new CheckWordUseCase(adapter);
     const guess = 'cable';
-    const result = checkWord(guess, correctAnswer);
+    const result = uc.execute(guess);
     expect(result.overall).toBeFalsy();
     expect(result.byLetter[0]).toEqual(makePresentElsewhereResult(0));
     expect(result.byLetter[1]).toEqual(makePresentElsewhereResult(1));
@@ -59,9 +76,10 @@ describe('Checking guess against correct answer', () => {
   });
 
   test('Guess contains a matching letter multiple times', () => {
-    const correctAnswer = 'black';
+    const adapter = new FakeStorageAdapter('black');
+    const uc = new CheckWordUseCase(adapter);
     const guess = 'abbey';
-    const result = checkWord(guess, correctAnswer);
+    const result = uc.execute(guess);
     expect(result.overall).toBeFalsy();
     expect(result.byLetter[0]).toEqual(makePresentElsewhereResult(0));
     expect(result.byLetter[1]).toEqual(makePresentElsewhereResult(1));
@@ -71,9 +89,10 @@ describe('Checking guess against correct answer', () => {
   });
 
   test('Guess contains a matching letter at the right index and elsewhere', () => {
-    const correctAnswer = 'black';
+    const adapter = new FakeStorageAdapter('black');
+    const uc = new CheckWordUseCase(adapter);
     const guess = 'bible';
-    const result = checkWord(guess, correctAnswer);
+    const result = uc.execute(guess);
     expect(result.overall).toBeFalsy();
     expect(result.byLetter[0]).toEqual(makeCorrectResult(0));
     expect(result.byLetter[1]).toEqual(makeFalseResult(1));
@@ -83,9 +102,10 @@ describe('Checking guess against correct answer', () => {
   });
 
   test('Correct answer has multiple occasions of the same letter', () => {
-    const correctAnswer = 'eagle';
+    const adapter = new FakeStorageAdapter('eagle');
+    const uc = new CheckWordUseCase(adapter);
     const guess = 'bleed';
-    const result = checkWord(guess, correctAnswer);
+    const result = uc.execute(guess);
     expect(result.overall).toBeFalsy();
     expect(result.byLetter[0]).toEqual(makeFalseResult(0));
     expect(result.byLetter[1]).toEqual(makePresentElsewhereResult(1));
@@ -95,9 +115,10 @@ describe('Checking guess against correct answer', () => {
   });
 
   test('Correct answer and guess are equal', () => {
-    const correctAnswer = 'black';
+    const adapter = new FakeStorageAdapter('black');
+    const uc = new CheckWordUseCase(adapter);
     const guess = 'black';
-    const result = checkWord(guess, correctAnswer);
+    const result = uc.execute(guess);
     expect(result.overall).toBeTruthy();
     for (let i = 0; i < NB_CHARS; i++) {
       expect(result.byLetter[i]).toEqual(makeCorrectResult(i));

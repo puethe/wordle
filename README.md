@@ -5,8 +5,8 @@ with a focus on the backend logic
 ## Development steps (preliminary list)
 - [x] Simple app with a GET endpoint that returns a boolean for a trial word (solution stored in code/file)
 - [x] Simple validation (word must have 5 letters)
-- [ ] Boolean response for each letter
-- [ ] Detailed response for each letter (incl. "yellow" phases)
+- [x] Boolean response for each letter
+- [x] Detailed response for each letter (incl. "yellow" phases)
 - [ ] Storage of result in a database
 - [ ] POST/PUT endpoint to modify the word
 - [ ] Validation of the word (e.g. by accessing the public API of an online dictionary)
