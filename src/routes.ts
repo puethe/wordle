@@ -5,9 +5,9 @@ import {
   Response,
   Router,
 } from 'express';
-import { CheckWordUseCase } from './domain';
+import { CheckWordUseCase, IStorageAdapter } from './domain';
 import { CustomError, ErrorCode } from './error';
-import { HardcodedAdapter } from './adapters';
+import { FileSystemAdapter, HardcodedAdapter } from './adapters';
 
 const HTTP_BAD_REQUEST = 400;
 const HTTP_INTERNAL_SERVER_ERROR = 500;
@@ -45,8 +45,16 @@ export const router = Router();
 
 router.get('/api', (req: Request, res: Response) => {
   const guess = req.query.guess!.toString();
-  const adapter = new HardcodedAdapter();
+  const adapter = makeStorageAdapterFromEnv();
   const uc = new CheckWordUseCase(adapter);
   const result = uc.execute(guess);
   res.json(result);
 });
+
+const makeStorageAdapterFromEnv = (): IStorageAdapter => {
+  if (process.env.STORAGE_TYPE === 'hardcoded') {
+    return new HardcodedAdapter();
+  } else {
+    return new FileSystemAdapter(process.env.INPUT_FILE || '');
+  }
+};
