@@ -3,15 +3,19 @@ import {
   IStorageAdapter,
   LetterResult,
   NB_CHARS,
+  ReplaceAnswerUseCase,
 } from '../src/domain';
 import { CustomError } from '../src/error';
 
 class FakeStorageAdapter extends IStorageAdapter {
-  constructor(private readonly correctAnswer: string) {
+  constructor(private correctAnswer: string) {
     super();
   }
   fetchTrueAnswer(): string {
     return this.correctAnswer;
+  }
+  replaceTrueAnswer(newAnswer: string): void {
+    this.correctAnswer = newAnswer
   }
 }
 
@@ -125,3 +129,23 @@ describe('Checking guess against correct answer', () => {
     }
   });
 });
+
+
+describe('Replacing the correct answer', () => {
+  test('New answer is of wrong length', () => {
+    const adapter = new FakeStorageAdapter('black');
+    const uc = new ReplaceAnswerUseCase(adapter);
+    const newAnswer = 'blue';
+    expect(() => {
+      uc.execute(newAnswer);
+    }).toThrow(CustomError);
+  });
+
+  test('New answer is stored in adapter', () => {
+    const adapter = new FakeStorageAdapter('black');
+    const uc = new ReplaceAnswerUseCase(adapter);
+    const newAnswer = 'white';
+    uc.execute(newAnswer)
+    expect(adapter.fetchTrueAnswer()).toEqual(newAnswer)
+  });
+})

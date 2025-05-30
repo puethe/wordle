@@ -22,6 +22,8 @@ interface LetterTmpResult {
 
 export abstract class IStorageAdapter {
   abstract fetchTrueAnswer(): string;
+
+  abstract replaceTrueAnswer(newAnswer: string): void;
 }
 
 export class CheckWordUseCase {
@@ -32,11 +34,7 @@ export class CheckWordUseCase {
     const answer = this.storageAdapter.fetchTrueAnswer();
 
     // Check if guess is legitimate
-    if (guess.length !== NB_CHARS) {
-      throw new CustomError({
-        message: `Invalid input. Guesses must have ${NB_CHARS} characters, input has ${guess.length} characters`,
-      });
-    }
+    checkValidity(guess);
 
     // Loop over the word a first time to find exact matches
     const wordResult: WordResult = answer.split('').map((_v, i) => {
@@ -73,3 +71,20 @@ export class CheckWordUseCase {
     };
   }
 }
+
+export class ReplaceAnswerUseCase {
+  constructor(private readonly storageAdapter: IStorageAdapter) {}
+
+  public execute(newAnswer: string): void {
+    checkValidity(newAnswer);
+    this.storageAdapter.replaceTrueAnswer(newAnswer);
+  }
+}
+
+const checkValidity = (input: string): void => {
+  if (input.length !== NB_CHARS) {
+    throw new CustomError({
+      message: `Invalid input. Wordle words must have ${NB_CHARS} characters, input has ${input.length} characters`,
+    });
+  }
+};
