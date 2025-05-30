@@ -33,7 +33,8 @@
     "serve": "node dist/index.js",
     "lint": "eslint 'src/**/*.ts'",
     "format": "prettier --write 'src/**/*.ts'",
-    "test": "jest tests/*"
+    "test": "jest tests/*",
+    "swagger": "ts-node src/swagger.ts"
   },
   "repository": {
     "type": "git",

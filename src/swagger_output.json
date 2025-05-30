@@ -11,7 +11,7 @@
     }
   ],
   "paths": {
-    "/api": {
+    "/play": {
       "get": {
         "description": "",
         "parameters": [
@@ -26,6 +26,30 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/change-answer": {
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "newAnswer": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }

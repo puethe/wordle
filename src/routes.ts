@@ -5,7 +5,11 @@ import {
   Response,
   Router,
 } from 'express';
-import { CheckWordUseCase, IStorageAdapter } from './domain';
+import {
+  CheckWordUseCase,
+  IStorageAdapter,
+  ReplaceAnswerUseCase,
+} from './domain';
 import { CustomError, ErrorCode } from './error';
 import { FileSystemAdapter, HardcodedAdapter } from './adapters';
 
@@ -43,12 +47,20 @@ export const errorHandler: ErrorRequestHandler = (
 
 export const router = Router();
 
-router.get('/api', (req: Request, res: Response) => {
+router.get('/play', (req: Request, res: Response) => {
   const guess = req.query.guess!.toString();
   const adapter = makeStorageAdapterFromEnv();
   const uc = new CheckWordUseCase(adapter);
   const result = uc.execute(guess);
   res.json(result);
+});
+
+router.post('/change-answer', (req: Request, res: Response) => {
+  const newAnswer = req.body.newAnswer!.toString();
+  const adapter = makeStorageAdapterFromEnv();
+  const uc = new ReplaceAnswerUseCase(adapter);
+  uc.execute(newAnswer);
+  res.json();
 });
 
 const makeStorageAdapterFromEnv = (): IStorageAdapter => {
