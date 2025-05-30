@@ -36,13 +36,15 @@ export const errorHandler: ErrorRequestHandler = (
   if (err instanceof CustomError) {
     res
       .status(mapErrorCode(err.statusCode))
-      .send({ errors: [{ message: err.message }] });
+      .json({ errors: [{ message: err.message }] });
+    return;
   }
 
   // Unhandled errors
   res
     .status(HTTP_INTERNAL_SERVER_ERROR)
-    .send({ errors: [{ message: 'Something went wrong' }] });
+    .json({ errors: [{ message: 'Something went wrong' }] });
+  return;
 };
 
 export const router = Router();
