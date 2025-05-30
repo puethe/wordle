@@ -57,7 +57,7 @@ router.get('/play', (req: Request, res: Response) => {
   res.json(result);
 });
 
-router.post('/change-answer', (req: Request, res: Response) => {
+router.put('/change-answer', (req: Request, res: Response) => {
   const newAnswer = req.body.newAnswer!.toString();
   const adapter = makeStorageAdapterFromEnv();
   const uc = new ReplaceAnswerUseCase(adapter);
