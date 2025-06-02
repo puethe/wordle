@@ -2,7 +2,9 @@ import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import swaggerOutput from './swagger_output.json';
 import { errorHandler, router } from './routes';
+import { loadConfig } from './config';
 
+loadConfig();
 const app = express();
 const PORT = 3000;
 
