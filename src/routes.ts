@@ -11,7 +11,11 @@ import {
   ReplaceAnswerUseCase,
 } from './domain';
 import { CustomError, ErrorCode } from './error';
-import { FileSystemAdapter, HardcodedAdapter } from './adapters';
+import {
+  DatabaseAdapter,
+  FileSystemAdapter,
+  HardcodedAdapter,
+} from './adapters';
 import { CONFIG } from './config';
 
 const HTTP_BAD_REQUEST = 400;
@@ -67,9 +71,12 @@ router.put('/change-answer', (req: Request, res: Response) => {
 });
 
 const makeStorageAdapterFromEnv = (): IStorageAdapter => {
-  if (CONFIG.storageType === 'hardcoded') {
-    return new HardcodedAdapter();
-  } else {
-    return new FileSystemAdapter(CONFIG.inputFile);
+  switch (CONFIG.storageType) {
+    case 'hardcoded':
+      return new HardcodedAdapter();
+    case 'filesystem':
+      return new FileSystemAdapter(CONFIG.inputFile);
+    case 'database':
+      return new DatabaseAdapter(CONFIG.databaseUrl);
   }
 };
