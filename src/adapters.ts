@@ -1,12 +1,13 @@
 import { IStorageAdapter } from './domain';
-import fs from 'node:fs';
+import { promises as fs } from 'fs';
 import { DataTypes, Sequelize } from 'sequelize';
 
 export class HardcodedAdapter extends IStorageAdapter {
-  fetchTrueAnswer(): string {
+  async fetchTrueAnswer(): Promise<string> {
     return 'hullo';
   }
-  replaceTrueAnswer(newAnswer: string): void {
+
+  async replaceTrueAnswer(newAnswer: string): Promise<void> {
     console.log(
       `Hard-coded adapter does not allow resetting the true answer to ${newAnswer}`,
     );
@@ -18,12 +19,12 @@ export class FileSystemAdapter extends IStorageAdapter {
     super();
   }
 
-  fetchTrueAnswer(): string {
-    return fs.readFileSync(this.inputFile, 'utf8');
+  async fetchTrueAnswer(): Promise<string> {
+    return await fs.readFile(this.inputFile, 'utf8');
   }
 
-  replaceTrueAnswer(newAnswer: string): void {
-    fs.writeFileSync(this.inputFile, newAnswer, 'utf8');
+  async replaceTrueAnswer(newAnswer: string): Promise<void> {
+    await fs.writeFile(this.inputFile, newAnswer, 'utf8');
   }
 }
 
@@ -35,14 +36,19 @@ export class DatabaseAdapter extends IStorageAdapter {
     this.session = new Sequelize(databaseUrl);
   }
 
-  fetchTrueAnswer(): string {
+  async fetchTrueAnswer(): Promise<string> {
     const DbAnswer = this.session.define('answer', {
-      value: DataTypes.STRING,
+      value: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     });
-    return DbAnswer.toString();
+
+    await DbAnswer.findOne();
+    return 'hullo';
   }
 
-  replaceTrueAnswer(newAnswer: string): void {
+  async replaceTrueAnswer(newAnswer: string): Promise<void> {
     console.log(
       `DatabaseAdapter does not allow resetting the true answer to ${newAnswer}`,
     );

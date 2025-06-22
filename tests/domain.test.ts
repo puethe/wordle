@@ -11,11 +11,12 @@ class FakeStorageAdapter extends IStorageAdapter {
   constructor(private correctAnswer: string) {
     super();
   }
-  fetchTrueAnswer(): string {
+  async fetchTrueAnswer(): Promise<string> {
     return this.correctAnswer;
   }
-  replaceTrueAnswer(newAnswer: string): void {
-    this.correctAnswer = newAnswer
+
+  async replaceTrueAnswer(newAnswer: string): Promise<void> {
+    this.correctAnswer = newAnswer;
   }
 }
 
@@ -44,20 +45,20 @@ const makeFalseResult = (idx: number): LetterResult => {
 };
 
 describe('Checking guess against correct answer', () => {
-  test('Guess is of wrong length', () => {
+  test('Guess is of wrong length', async () => {
     const adapter = new FakeStorageAdapter('black');
     const uc = new CheckWordUseCase(adapter);
     const guess = 'blue';
-    expect(() => {
-      uc.execute(guess);
-    }).toThrow(CustomError);
+    await expect(async () => {
+      await uc.execute(guess);
+    }).rejects.toThrow(CustomError);
   });
 
-  test('Correct answer and guess share some common letters', () => {
+  test('Correct answer and guess share some common letters', async () => {
     const adapter = new FakeStorageAdapter('black');
     const uc = new CheckWordUseCase(adapter);
     const guess = 'blind';
-    const result = uc.execute(guess);
+    const result = await uc.execute(guess);
     expect(result.overall).toBeFalsy();
     expect(result.byLetter[0]).toEqual(makeCorrectResult(0));
     expect(result.byLetter[1]).toEqual(makeCorrectResult(1));
@@ -66,11 +67,11 @@ describe('Checking guess against correct answer', () => {
     expect(result.byLetter[4]).toEqual(makeFalseResult(4));
   });
 
-  test('Correct answer and guess share letters at different indexes', () => {
+  test('Correct answer and guess share letters at different indexes', async () => {
     const adapter = new FakeStorageAdapter('black');
     const uc = new CheckWordUseCase(adapter);
     const guess = 'cable';
-    const result = uc.execute(guess);
+    const result = await uc.execute(guess);
     expect(result.overall).toBeFalsy();
     expect(result.byLetter[0]).toEqual(makePresentElsewhereResult(0));
     expect(result.byLetter[1]).toEqual(makePresentElsewhereResult(1));
@@ -79,11 +80,11 @@ describe('Checking guess against correct answer', () => {
     expect(result.byLetter[4]).toEqual(makeFalseResult(4));
   });
 
-  test('Guess contains a matching letter multiple times', () => {
+  test('Guess contains a matching letter multiple times', async () => {
     const adapter = new FakeStorageAdapter('black');
     const uc = new CheckWordUseCase(adapter);
     const guess = 'abbey';
-    const result = uc.execute(guess);
+    const result = await uc.execute(guess);
     expect(result.overall).toBeFalsy();
     expect(result.byLetter[0]).toEqual(makePresentElsewhereResult(0));
     expect(result.byLetter[1]).toEqual(makePresentElsewhereResult(1));
@@ -92,11 +93,11 @@ describe('Checking guess against correct answer', () => {
     expect(result.byLetter[4]).toEqual(makeFalseResult(4));
   });
 
-  test('Guess contains a matching letter at the right index and elsewhere', () => {
+  test('Guess contains a matching letter at the right index and elsewhere', async () => {
     const adapter = new FakeStorageAdapter('black');
     const uc = new CheckWordUseCase(adapter);
     const guess = 'bible';
-    const result = uc.execute(guess);
+    const result = await uc.execute(guess);
     expect(result.overall).toBeFalsy();
     expect(result.byLetter[0]).toEqual(makeCorrectResult(0));
     expect(result.byLetter[1]).toEqual(makeFalseResult(1));
@@ -105,11 +106,11 @@ describe('Checking guess against correct answer', () => {
     expect(result.byLetter[4]).toEqual(makeFalseResult(4));
   });
 
-  test('Correct answer has multiple occasions of the same letter', () => {
+  test('Correct answer has multiple occasions of the same letter', async () => {
     const adapter = new FakeStorageAdapter('eagle');
     const uc = new CheckWordUseCase(adapter);
     const guess = 'bleed';
-    const result = uc.execute(guess);
+    const result = await uc.execute(guess);
     expect(result.overall).toBeFalsy();
     expect(result.byLetter[0]).toEqual(makeFalseResult(0));
     expect(result.byLetter[1]).toEqual(makePresentElsewhereResult(1));
@@ -118,11 +119,11 @@ describe('Checking guess against correct answer', () => {
     expect(result.byLetter[4]).toEqual(makeFalseResult(4));
   });
 
-  test('Correct answer and guess are equal', () => {
+  test('Correct answer and guess are equal', async () => {
     const adapter = new FakeStorageAdapter('black');
     const uc = new CheckWordUseCase(adapter);
     const guess = 'black';
-    const result = uc.execute(guess);
+    const result = await uc.execute(guess);
     expect(result.overall).toBeTruthy();
     for (let i = 0; i < NB_CHARS; i++) {
       expect(result.byLetter[i]).toEqual(makeCorrectResult(i));
@@ -130,22 +131,22 @@ describe('Checking guess against correct answer', () => {
   });
 });
 
-
 describe('Replacing the correct answer', () => {
-  test('New answer is of wrong length', () => {
+  test('New answer is of wrong length', async () => {
     const adapter = new FakeStorageAdapter('black');
     const uc = new ReplaceAnswerUseCase(adapter);
     const newAnswer = 'blue';
-    expect(() => {
-      uc.execute(newAnswer);
-    }).toThrow(CustomError);
+    await expect(async () => {
+      await uc.execute(newAnswer);
+    }).rejects.toThrow(CustomError);
   });
 
-  test('New answer is stored in adapter', () => {
+  test('New answer is stored in adapter', async () => {
     const adapter = new FakeStorageAdapter('black');
     const uc = new ReplaceAnswerUseCase(adapter);
     const newAnswer = 'white';
-    uc.execute(newAnswer)
-    expect(adapter.fetchTrueAnswer()).toEqual(newAnswer)
+    await uc.execute(newAnswer);
+    const storedAnswer = await adapter.fetchTrueAnswer();
+    expect(storedAnswer).toEqual(newAnswer);
   });
-})
+});

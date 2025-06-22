@@ -14,7 +14,7 @@ export const CONFIG: Config = {
 };
 
 function isStorageType(str: string): str is StorageType {
-  return ['hardcoded', 'filesystem'].includes(str);
+  return ['hardcoded', 'filesystem', 'database'].includes(str);
 }
 
 export const loadConfig = () => {

@@ -21,17 +21,17 @@ interface LetterTmpResult {
 }
 
 export abstract class IStorageAdapter {
-  abstract fetchTrueAnswer(): string;
+  abstract fetchTrueAnswer(): Promise<string>;
 
-  abstract replaceTrueAnswer(newAnswer: string): void;
+  abstract replaceTrueAnswer(newAnswer: string): Promise<void>;
 }
 
 export class CheckWordUseCase {
   constructor(private readonly storageAdapter: IStorageAdapter) {}
 
-  public execute(guess: string): AttemptResult {
+  public async execute(guess: string): Promise<AttemptResult> {
     // Retrieve the answer
-    const answer = this.storageAdapter.fetchTrueAnswer();
+    const answer = await this.storageAdapter.fetchTrueAnswer();
 
     // Check if guess is legitimate
     checkValidity(guess);
@@ -75,9 +75,9 @@ export class CheckWordUseCase {
 export class ReplaceAnswerUseCase {
   constructor(private readonly storageAdapter: IStorageAdapter) {}
 
-  public execute(newAnswer: string): void {
+  public async execute(newAnswer: string): Promise<void> {
     checkValidity(newAnswer);
-    this.storageAdapter.replaceTrueAnswer(newAnswer);
+    await this.storageAdapter.replaceTrueAnswer(newAnswer);
   }
 }
 

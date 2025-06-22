@@ -54,19 +54,19 @@ export const errorHandler: ErrorRequestHandler = (
 
 export const router = Router();
 
-router.get('/play', (req: Request, res: Response) => {
+router.get('/play', async (req: Request, res: Response) => {
   const guess = req.query.guess!.toString();
   const adapter = makeStorageAdapterFromEnv();
   const uc = new CheckWordUseCase(adapter);
-  const result = uc.execute(guess);
+  const result = await uc.execute(guess);
   res.json(result);
 });
 
-router.put('/change-answer', (req: Request, res: Response) => {
+router.put('/change-answer', async (req: Request, res: Response) => {
   const newAnswer = req.body.newAnswer!.toString();
   const adapter = makeStorageAdapterFromEnv();
   const uc = new ReplaceAnswerUseCase(adapter);
-  uc.execute(newAnswer);
+  await uc.execute(newAnswer);
   res.json();
 });
 
