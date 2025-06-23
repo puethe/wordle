@@ -9,7 +9,7 @@ with a focus on the backend logic
 - [x] Simple validation (word must have 5 letters)
 - [x] Boolean response for each letter
 - [x] Detailed response for each letter (incl. "yellow" phases)
-- [ ] Storage of result in a database
+- [x] Storage of result in a database
 - [x] POST/PUT endpoint to modify the word
 - [ ] Validation of the word (e.g. by accessing the public API of an online dictionary)
 - [ ] Interpretation of IP
