@@ -2,9 +2,8 @@ import { IStorageAdapter } from '../domain';
 import { Sequelize } from 'sequelize';
 import { DbAnswer, initDbAnswer } from './db_models';
 
-export class DatabaseAdapter extends IStorageAdapter {
+export class DatabaseAdapter implements IStorageAdapter {
   constructor(readonly databaseUrl: string) {
-    super();
     const session = new Sequelize(databaseUrl);
     initDbAnswer(session);
   }

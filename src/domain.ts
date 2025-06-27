@@ -20,10 +20,9 @@ interface LetterTmpResult {
   value: string;
 }
 
-export abstract class IStorageAdapter {
-  abstract fetchTrueAnswer(): Promise<string>;
-
-  abstract replaceTrueAnswer(newAnswer: string): Promise<void>;
+export interface IStorageAdapter {
+  fetchTrueAnswer(): Promise<string>;
+  replaceTrueAnswer(newAnswer: string): Promise<void>;
 }
 
 export class CheckWordUseCase {

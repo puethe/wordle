@@ -11,6 +11,7 @@ with a focus on the backend logic
 - [x] Detailed response for each letter (incl. "yellow" phases)
 - [x] Storage of result in a database
 - [x] POST/PUT endpoint to modify the word
+- [ ] DB migration
 - [ ] Validation of the word (e.g. by accessing the public API of an online dictionary)
 - [ ] Interpretation of IP
 - [ ] Implementation of the "max tries" by user

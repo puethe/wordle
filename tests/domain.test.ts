@@ -7,10 +7,8 @@ import {
 } from '../src/domain';
 import { CustomError } from '../src/error';
 
-class FakeStorageAdapter extends IStorageAdapter {
-  constructor(private correctAnswer: string) {
-    super();
-  }
+class FakeStorageAdapter implements IStorageAdapter {
+  constructor(private correctAnswer: string) {}
   async fetchTrueAnswer(): Promise<string> {
     return this.correctAnswer;
   }

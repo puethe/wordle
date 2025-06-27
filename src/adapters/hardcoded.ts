@@ -1,6 +1,6 @@
 import { IStorageAdapter } from '../domain';
 
-export class HardcodedAdapter extends IStorageAdapter {
+export class HardcodedAdapter implements IStorageAdapter {
   async fetchTrueAnswer(): Promise<string> {
     return 'hullo';
   }

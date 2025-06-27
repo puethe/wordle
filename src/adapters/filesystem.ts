@@ -1,10 +1,8 @@
 import { IStorageAdapter } from '../domain';
 import { promises as fs } from 'fs';
 
-export class FileSystemAdapter extends IStorageAdapter {
-  constructor(private readonly inputFile: string) {
-    super();
-  }
+export class FileSystemAdapter implements IStorageAdapter {
+  constructor(private readonly inputFile: string) {}
 
   async fetchTrueAnswer(): Promise<string> {
     return await fs.readFile(this.inputFile, 'utf8');
