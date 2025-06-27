@@ -1,11 +1,11 @@
+import { CustomError } from '../src/error';
 import {
   CheckWordUseCase,
   IStorageAdapter,
-  LetterResult,
-  NB_CHARS,
   ReplaceAnswerUseCase,
-} from '../src/domain';
-import { CustomError } from '../src/error';
+} from '../src/domain/use_cases';
+import { LetterResult } from '../src/domain/entities';
+import { NB_CHARS } from '../src/domain/constants';
 
 class FakeStorageAdapter implements IStorageAdapter {
   constructor(private correctAnswer: string) {}

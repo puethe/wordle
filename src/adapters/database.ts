@@ -1,6 +1,7 @@
-import { IStorageAdapter } from '../domain';
 import { Sequelize } from 'sequelize';
 import { DbAnswer, initDbAnswer } from './db_models';
+
+import { IStorageAdapter } from '../domain/use_cases';
 
 export class DatabaseAdapter implements IStorageAdapter {
   constructor(readonly databaseUrl: string) {
