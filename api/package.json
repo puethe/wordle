@@ -26,10 +26,10 @@
   },
   "name": "wordle",
   "version": "1.0.0",
-  "description": "A re-implementation of the [Wordle game](https://www.nytimes.com/games/wordle/index.html) in NodeJS, with a focus on the backend logic",
+  "description": "A re-implementation of the [Wordle game](https://www.nytimes.com/games/wordle/index.html) in NodeJS",
   "main": "index.ts",
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "start": "ts-node --esm src/index.ts",
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "serve": "node dist/index.js",
@@ -43,7 +43,7 @@
     "url": "git+https://github.com/puethe/wordle.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Christoph Puethe",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {

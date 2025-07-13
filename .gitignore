@@ -1,6 +1,4 @@
 .idea
-node_modules
-dist
-.env
-answer.txt
-*.sqlite
+**/node_modules
+**/dist
+**/.env
