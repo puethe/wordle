@@ -14,7 +14,7 @@
     "nodemon": "^3.1.10",
     "prettier": "^3.5.3",
     "ts-jest": "^29.3.4",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.20.3",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.32.0"
   },
@@ -30,7 +30,7 @@
   "description": "A re-implementation of the [Wordle game](https://www.nytimes.com/games/wordle/index.html) in NodeJS",
   "main": "index.ts",
   "scripts": {
-    "start": "ts-node --esm src/index.ts",
+    "start": "tsx src/index.ts",
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "serve": "node dist/index.js",
@@ -46,7 +46,7 @@
   "keywords": [],
   "author": "Christoph Puethe",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/puethe/wordle/issues"
   },
