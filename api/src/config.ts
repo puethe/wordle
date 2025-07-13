@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { CustomError } from './error';
 
 type StorageType = 'hardcoded' | 'filesystem' | 'database';
