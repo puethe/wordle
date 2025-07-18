@@ -1,8 +1,5 @@
 {
-  "name": "wordle-ui",
-  "version": "1.0.0",
-  "description": "A re-implementation of the [Wordle game](https://www.nytimes.com/games/wordle/index.html) in React",
-  "main": "index.ts",
+  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/puethe/wordle.git"
@@ -14,5 +11,30 @@
   "bugs": {
     "url": "https://github.com/puethe/wordle/issues"
   },
-  "homepage": "https://github.com/puethe/wordle#readme"
+  "homepage": "https://github.com/puethe/wordle#readme",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint src/",
+    "format": "prettier --write src/"
+  },
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.31.0",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.7.0",
+    "eslint": "^9.31.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.3.0",
+    "prettier": "^3.6.2",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.37.0",
+    "vite": "^7.0.5"
+  }
 }
